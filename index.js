@@ -92,21 +92,15 @@ function createDescription(userName, data){
 		.setTimestamp()
 		.setFooter("밤에뜨는해", "https://i.imgur.com/Vc11WQc_d.webp?maxwidth=760&fidelity=grand")
 		;
-
-		// .addFields(
-		// 	{
-		// 		"name": "[ 보 유 캐 릭 터 2]",
-		// 		"value": body6,
-		// 		inline: true
-		// 	}
-		// )
-		// 보유 캐릭터 잘라서 출력
 		const ownInfoArr = body5.split("\n");
 		count = 1;
 		let temp = "";
 		for(let i = 0; i < ownInfoArr.length; i++){
 			temp = temp + ownInfoArr[i] + "\n";
 			if(i % 6 === 0 && i !== 0){
+				if(count % 4 === 0 || count === 1){
+					embed.addFields({ name: '\u200B', value: '\u200B' });
+				} 
 				embed.addFields(
 					{
 						"name": `[ 보 유 캐 릭 터 ${count}]`,
