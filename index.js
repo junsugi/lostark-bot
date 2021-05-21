@@ -5,42 +5,39 @@ const config = require("./config.json");
 const lostArkImg = require("./lostArkData.json")
 // initialized
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log('까궁 봇 출격 완료!');
 });
 
 // 로그인 토큰
-client.login(config.token);
+// 개발
+client.login(config['dev-token']);
+// 운영
+// client.login(config['token']);
 
 // 메시지 대기
 client.on('message', message => {
-	console.log(message.content);
-	const messageArr = message.content.split("")
-	try{
-		if(messageArr[0].includes("!")){
-			const userName = message.content.replace("!", "");
-			if(userName.includes("이벤트")){
-				// 이벤트 정보 출력
-				lostArk.getEventMessageEmbed().then((data) => {
-					const embed = createEventDescription(data);
-					for(let i = 0; i < embed.length; i++)
-						message.channel.send(embed[i]);
-						setTimeout(()=>{}, 1000);
-				});
-				
-				return;
-			} else {
-				lostArk.getUserInfo(userName).then((data) => {
-					// description 생성
-					if(userName === '정점은움직이지않아'){
-						message.channel.send("*__길드장님의 고귀한 정보입니다.__* 🙇‍♂️🙇‍♀️");
-					}
-					const embed = createDescription(userName, data);			
-					message.channel.send(embed);	
-					return;	
-				});
-			}
+	if (!message.author.bot) {
+		const messageArr = message.content.split(" ")
+		const command = messageArr[0];
+		if (command.includes(".이벤트")) {
+			// 이벤트 정보 출력
+			lostArk.getEventMessageEmbed().then((data) => {
+				const embed = createEventDescription(data);
+				for (let i = 0; i < embed.length; i++)
+					message.channel.send(embed[i]);
+			});
+		} else if (command === '.전투정보') {
+			const userName = messageArr[1];
+			lostArk.getUserInfo(userName).then((data) => {
+				// description 생성
+				if (userName === '정점은움직이지않아') {
+					message.channel.send("*__길드장님의 고귀한 정보입니다.__* 🙇‍♂️🙇‍♀️");
+				}
+				const embed = createDescription(userName, data);
+				message.channel.send(embed);
+			});
 		}
-	} catch (error){		
+
 	}
 });
 
@@ -91,17 +88,36 @@ function createDescription(userName, data){
 				inline: true
 			},
 		)
-		.addFields(
-			{ name: '\u200B', value: '\u200B' },
-			{
-				"name": "[ 보 유 캐 릭 터 ]",
-				"value": body5,
-			}
-		)
 		.setThumbnail('https://i.imgur.com/Vc11WQc_d.webp?maxwidth=760&fidelity=grand')
 		.setTimestamp()
 		.setFooter("밤에뜨는해", "https://i.imgur.com/Vc11WQc_d.webp?maxwidth=760&fidelity=grand")
 		;
+
+		// .addFields(
+		// 	{
+		// 		"name": "[ 보 유 캐 릭 터 2]",
+		// 		"value": body6,
+		// 		inline: true
+		// 	}
+		// )
+		// 보유 캐릭터 잘라서 출력
+		const ownInfoArr = body5.split("\n");
+		count = 1;
+		let temp = "";
+		for(let i = 0; i < ownInfoArr.length; i++){
+			temp = temp + ownInfoArr[i] + "\n";
+			if(i % 6 === 0 && i !== 0){
+				embed.addFields(
+					{
+						"name": `[ 보 유 캐 릭 터 ${count}]`,
+						"value": temp,
+						inline: true
+					}
+				)
+				count = count + 1;
+				temp = "";
+			}
+		}
 
 	return embed;
 }
@@ -115,7 +131,6 @@ function createEventDescription(data){
 			.setImage(`${data['thumb'][i]}`)
 			.setFooter(`이벤트기간 : ${data['term'][i]}`, "")
 			;
-		console.log(`${data['thumb'][i]}`);
 		embedArr.push(embed);
 	}
 

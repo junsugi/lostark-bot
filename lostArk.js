@@ -43,6 +43,7 @@ function getUserInfo(userName){
                 else if (index === 2)
                     json['garden_name'] = $(this).text();
             });
+            
             // 특성 정보
             let count = 0;
             let temp = [];
@@ -98,7 +99,6 @@ function getUserInfo(userName){
                     json['health'] = health;
                 }
             });
-
             resolve(json);
         });
     });
@@ -134,7 +134,6 @@ function getEventMessageEmbed(){
             });
             event['term'] = temp;
 
-            console.log(event);
             resolve(event);
         })
     });
