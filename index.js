@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const lostArk = require("./lostArk.js");
 const config = require("./config.json");
-const lostArkImg = require("./lostArkData.json")
+const lostArkData = require("./lostArkData.json")
 // initialized
 client.once('ready', () => {
 	console.log('까궁 봇 출격 완료!');
@@ -57,7 +57,7 @@ function createDescription(userName, data){
 
 	const embed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
-		.setAuthor(`__${userName}__`, lostArkImg[`${data['job']}`], `https://lostark.game.onstove.com/Profile/Character/${userName}`)
+		.setAuthor(`__${userName}__`, lostArkData['job_images'][`${data['job']}`], `https://lostark.game.onstove.com/Profile/Character/${userName}`)
 		.addFields(
 			{
 				"name": "[ 기 본 정 보 ]", 
@@ -111,6 +111,16 @@ function createDescription(userName, data){
 				count = count + 1;
 				temp = "";
 			}
+		}
+
+		if(count <= 1){
+			embed.addFields(
+				{
+					"name": `[ 보 유 캐 릭 터 1]`,
+					"value": temp,
+					inline: true
+				}
+			)
 		}
 
 	return embed;
