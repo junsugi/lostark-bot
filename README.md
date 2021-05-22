@@ -16,9 +16,9 @@
    그 외에는 자신이 사용하고 싶은 라이브러리를 사용하면 되는데 내가 사용한 라이브러리는 다음과 같다.
 
    ```shell
-   npm install axios --save
-   npm install cheerio --save
-   npm install nodemon --save-dev
+   > npm install axios --save
+   > npm install cheerio --save
+   > npm install nodemon --save-dev
    ```
 
    [axios](https://github.com/axios/axios) : 너무나도 유명한 REST API 라이브러리, 그래서 사용했는데 비동기 처리 때문에 약간 애먹었다.
@@ -35,15 +35,21 @@
 
 5. TOKEN 을 복사해두고 `discord.js` 에서 로그인 할 때 사용할 수 있도록 한다.
 
-6. [자세한 내용은 해당 블로그 참고](https://marshall-ku.com/web/tips/node-js%EB%A1%9C-%EB%94%94%EC%8A%A4%EC%BD%94%EB%93%9C-%EB%B4%87-%EB%A7%8C%EB%93%A4%EA%B8%B0) (추후에 정리해서 벨로그에 올리겠습니다.)
 
 ## Demo
 
-1. 채팅에 `!(느낌표) + 로스트아크 닉네임`&nbsp;을 입력한다.
+1. 채팅에 `.전투정보 + 로스트아크 닉네임`&nbsp;을 입력한다.
 
-   ![](./images/demo_1.png)
+   ![](./images/character.gif)
 
-2. 채팅에 `!이벤트` &nbsp;라고 입력하면 이벤트 정보가 뜬다.
+   
 
-   ![](./images/demo_2.png)
+   2. 채팅에 `.이벤트`&nbsp;를 입력한다.
 
+      ![](./images/event.gif)
+
+
+
+## Discord.js를 이용한 봇 개발
+
+1. [`discord.js`&nbsp;튜토리얼](https://velog.io/@junsugi/Discord.js%EB%A1%9C-Bot-%EB%A7%8C%EB%93%A4%EA%B8%B0#%EA%B0%9C%EB%B0%9C%EC%9A%A9-%EB%B4%87-%EC%83%9D%EC%84%B1%ED%95%98%EA%B8%B0)

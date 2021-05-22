@@ -2,7 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const lostArk = require("./lostArk.js");
 const config = require("./config.json");
-const lostArkData = require("./lostArkData.json")
+const lostArkData = require("./lostArkData.json");
+const { file } = require('googleapis/build/src/apis/file');
+
 // initialized
 client.once('ready', () => {
 	console.log('까궁 봇 출격 완료!');
@@ -16,9 +18,12 @@ client.login(config['dev-token']);
 
 // 메시지 대기
 client.on('message', message => {
+	// 추후에 원하는 채널에서만 작동하도록 수정
 	if (!message.author.bot) {
+		// .명령어 (닉네임)으로 입력을 강제했기때문에 공백으로 나눠서 0은 명령어 1은 닉네임으로 간주
 		const messageArr = message.content.split(" ")
 		const command = messageArr[0];
+		// 이벤트는 닉네임 입력 없이 가능
 		if (command.includes(".이벤트")) {
 			// 이벤트 정보 출력
 			lostArk.getEventMessageEmbed().then((data) => {
@@ -36,8 +41,9 @@ client.on('message', message => {
 				const embed = createDescription(userName, data);
 				message.channel.send(embed);
 			});
+		} else if (command === '.참여'){
+			console.log("참여!");
 		}
-
 	}
 });
 
