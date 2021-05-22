@@ -44,9 +44,9 @@
 
    
 
-   2. 채팅에 `.이벤트`&nbsp;를 입력한다.
+2. 채팅에 `.이벤트`&nbsp;를 입력한다.
 
-      ![](./images/event.gif)
+    ![](./images/event.gif)
 
 
 
