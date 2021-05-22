@@ -12,7 +12,7 @@ client.once('ready', () => {
 // 개발
 client.login(config['dev-token']);
 // 운영
-// client.login(config['token']);
+//client.login(config['token']);
 
 // 메시지 대기
 client.on('message', message => {
@@ -55,9 +55,16 @@ function createDescription(userName, data){
 		body5 = body5 + `[${data['own_userName'][i]}](https://lostark.game.onstove.com/Profile/Character/${data['own_userName'][i]}) / ${data['own_job'][i]}\n`;
 	}
 
+	let imgSrc = "";
+	for(let i = 0; i < lostArkData['job_images'].length; i++){
+		if(lostArkData['job_images'][i]['jobName'] === data['job']){
+			imgSrc = lostArkData['job_images'][i]['imgSrc'];
+		}
+	}
+
 	const embed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
-		.setAuthor(`__${userName}__`, lostArkData['job_images'][`${data['job']}`], `https://lostark.game.onstove.com/Profile/Character/${userName}`)
+		.setAuthor(`__${userName}__`, `${imgSrc}`, `https://lostark.game.onstove.com/Profile/Character/${userName}`)
 		.addFields(
 			{
 				"name": "[ 기 본 정 보 ]", 
@@ -115,6 +122,7 @@ function createDescription(userName, data){
 
 		if(count <= 1){
 			embed.addFields(
+				{ name: '\u200B', value: '\u200B' },
 				{
 					"name": `[ 보 유 캐 릭 터 1]`,
 					"value": temp,
