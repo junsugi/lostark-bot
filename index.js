@@ -3,7 +3,6 @@ const client = new Discord.Client();
 const lostArk = require("./lostArk.js");
 const config = require("./config.json");
 const lostArkData = require("./lostArkData.json");
-const { file } = require('googleapis/build/src/apis/file');
 
 // initialized
 client.once('ready', () => {
@@ -41,9 +40,39 @@ client.on('message', message => {
 				const embed = createDescription(userName, data);
 				message.channel.send(embed);
 			});
-		} else if (command === '.참여'){
-			console.log("참여!");
-		}
+		} else if (command.includes('.참여정보')){
+			const userName = messageArr[1];	
+			const option = command[command.length-1].toLowerCase();
+			// 영어만 정규 표현식
+			const eng = /^[a-zA-Z]*$/; 
+			const optionChk = eng.test(option);
+
+			// option 값이 영어일 때 Y 혹은 N 인지 확인
+			if(optionChk && (option !== 'y' && option !== 'n')){
+				message.channel.send("옵션값은 영문으로 Y/N 으로만 가능합니다.");
+				return;
+			}
+			console.log(`참여정보! : ${userName}`);
+			lostArk.getInvestigateInfo(Discord, userName).then((json) => {
+				if(json['column'].length === 0){
+					message.channel.send("설문조사 안했음!!!");
+					return;
+				}
+				let embed = new Discord.MessageEmbed();
+				for(let i = 0; i < json['column'].length; i++){
+					if(optionChk){
+						if((option === "Y" || option === "y") && json['rowData'][i] === '네'){
+							embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+						} else if((option === "N" || option === "n") && json['rowData'][i] === '아니오'){
+							embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+						}
+					} else {
+						embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+					}
+				}
+				message.channel.send(embed);
+			});
+		} 
 	}
 });
 

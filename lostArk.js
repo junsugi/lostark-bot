@@ -1,36 +1,40 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const xlsx = require("xlsx");
+const discord = 
+
+function getHtml(url){
+    return new Promise((resolve, reject) => {
+        axios.get(`${url}`).then((html) => {
+            resolve(html);
+        });
+    });
+}
 
 function getUserInfo(userName){
     console.log(`call getUserInfo : ${userName}`);
     return new Promise((resolve, reject) => {
-        axios.get(`https://lostark.game.onstove.com/Profile/Character/`+encodeURI(userName)).then(html => {
+        getHtml(`https://lostark.game.onstove.com/Profile/Character/`+encodeURI(userName)).then(html => {
             const $ = cheerio.load(html.data);
             let json = {};
             // 닉네임
             json['userName'] = $("span.profile-character-info__name").text();
-            
             // 레벨
             json['level'] = $("span.profile-character-info__lv").text();
-
             // 템렙
             $("div.level-info2__item > span").each(function(index, item){
                 if(index === 1)
                     json['itemLevel'] = $(this).text();
             });
-
             // 서버명
             json['server'] = $("span.profile-character-info__server").text().replace("@", "");
-
             // 직업명
             json['job'] = $("img.profile-character-info__img").attr("alt");
-
             // 길드
             $("div.game-info__guild > span").each(function(index, item){
                 if(index === 1)
                     json['guild'] = $(this).text();
             });
-
             // 칭호
             $("div.game-info__title > span").each(function(index, item){
                 if(index === 1)
@@ -107,7 +111,7 @@ function getUserInfo(userName){
 function getEventMessageEmbed(){
     console.log("call getEventMessageEmbed !!");
     return new Promise((resolve, reject) => {
-        axios.get("https://lostark.game.onstove.com/News/Event/Now").then(html => {
+        getHtml("https://lostark.game.onstove.com/News/Event/Now").then(html => {
             const $ = cheerio.load(html.data);
             let event = {};
             // 링크
@@ -139,4 +143,38 @@ function getEventMessageEmbed(){
     });
 }
 
-module.exports = {getUserInfo, getEventMessageEmbed};
+function getInvestigateInfo(Discord, userName) {
+    return new Promise((resolve, reject) => {
+        // xlsx 데이터 읽어오기
+        const workbook = xlsx.readFile('./docs/20210510 주차 길드 컨텐츠 참여 조사(응답).xlsx');
+        const worksheet = workbook.Sheets['설문지 응답 시트1'];
+        const rowSize = xlsx.utils.decode_range(worksheet['!ref'])['e']['r'];
+        const columnSize = xlsx.utils.decode_range(worksheet['!ref'])['e']['c'];
+        // 컬럼 데이터 가져오기
+        let column = [];
+        for (let i = 0; i < columnSize; i++) {
+            const alpabet = String.fromCharCode((65 + i));
+            column.push(worksheet[`${alpabet}1`]['v']);
+        }
+        // B컬럼이 닉네임 정보를 가지고 있음. (해당 닉네임 row 데이터 가져오기)
+        let rowData = [];
+        for (let i = 0; i < rowSize; i++) {
+            if (worksheet[`B${i + 2}`]['v'] === userName) {
+                const row = (i + 2);
+                console.log()
+                for (let j = 0; j < columnSize; j++) {
+                    const alpabet = String.fromCharCode((65 + j));
+                    rowData.push(worksheet[alpabet + row] === undefined ? "응답 안함" : worksheet[(alpabet + row)]['v']);
+                }
+            }
+        }
+        // 값이 없으면 설문조사 안한 사람
+        const json = {
+            "column" : rowData.length > 0 ? column : "",
+            "rowData": rowData.length > 0 ? rowData : "으이구 설문조사 안했네~!!"
+        }
+        resolve(json);
+    });
+}
+
+module.exports = {getUserInfo, getEventMessageEmbed, getInvestigateInfo};
