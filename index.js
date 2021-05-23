@@ -15,6 +15,7 @@ client.login(config['dev-token']);
 // 운영
 //client.login(config['token']);
 
+
 // 메시지 대기
 client.on('message', message => {
 	// 추후에 원하는 채널에서만 작동하도록 수정
@@ -62,12 +63,12 @@ client.on('message', message => {
 				for(let i = 0; i < json['column'].length; i++){
 					if(optionChk){
 						if((option === "Y" || option === "y") && json['rowData'][i] === '네'){
-							embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+							embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
 						} else if((option === "N" || option === "n") && json['rowData'][i] === '아니오'){
-							embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+							embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
 						}
 					} else {
-						embed.addFields({"name": json['column'][i], "value": json['rowData'][i]});
+						embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
 					}
 				}
 				message.channel.send(embed);

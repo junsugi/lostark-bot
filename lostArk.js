@@ -1,7 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
-const discord = 
 
 function getHtml(url){
     return new Promise((resolve, reject) => {
@@ -161,10 +160,13 @@ function getInvestigateInfo(Discord, userName) {
         for (let i = 0; i < rowSize; i++) {
             if (worksheet[`B${i + 2}`]['v'] === userName) {
                 const row = (i + 2);
-                console.log()
                 for (let j = 0; j < columnSize; j++) {
                     const alpabet = String.fromCharCode((65 + j));
-                    rowData.push(worksheet[alpabet + row] === undefined ? "응답 안함" : worksheet[(alpabet + row)]['v']);
+                    if(j === 0){
+                        rowData.push(worksheet[alpabet + row] === undefined ? "응답 안함" : worksheet[(alpabet + row)]['w']);
+                    } else {
+                        rowData.push(worksheet[alpabet + row] === undefined ? "응답 안함" : worksheet[(alpabet + row)]['v']);
+                    }
                 }
             }
         }
