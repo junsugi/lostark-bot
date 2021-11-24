@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
+import * as Discord from 'discord.js';
+import * as lostArk from './utils/lostArk';
+import * as config from './config/config';
+
 const client = new Discord.Client();
-const lostArk = require("./lostArk.js");
-const config = require("./config.json");
-const lostArkData = require("./lostArkData.json");
 
 // initialized
 client.once('ready', () => {
@@ -10,10 +10,7 @@ client.once('ready', () => {
 });
 
 // 로그인 토큰
-// 개발
-client.login(config['dev-token']);
-// 운영
-//client.login(config['token']);
+client.login(process.env ? config.DISCORD_CONFIG.TOKEN : config.DISCORD_CONFIG.DEV_TOKEN);
 
 
 // 메시지 대기
@@ -41,43 +38,12 @@ client.on('message', message => {
 				const embed = createDescription(userName, data);
 				message.channel.send(embed);
 			});
-		} else if (command.includes('.참여정보')){
-			const userName = messageArr[1];	
-			const option = command[command.length-1].toLowerCase();
-			// 영어만 정규 표현식
-			const eng = /^[a-zA-Z]*$/; 
-			const optionChk = eng.test(option);
-
-			// option 값이 영어일 때 Y 혹은 N 인지 확인
-			if(optionChk && (option !== 'y' && option !== 'n')){
-				message.channel.send("옵션값은 영문으로 Y/N 으로만 가능합니다.");
-				return;
-			}
-			console.log(`참여정보! : ${userName}`);
-			lostArk.getInvestigateInfo(Discord, userName).then((json) => {
-				if(json['column'].length === 0){
-					message.channel.send("설문조사 안했음!!!");
-					return;
-				}
-				let embed = new Discord.MessageEmbed();
-				for(let i = 0; i < json['column'].length; i++){
-					if(optionChk){
-						if((option === "Y" || option === "y") && json['rowData'][i] === '네'){
-							embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
-						} else if((option === "N" || option === "n") && json['rowData'][i] === '아니오'){
-							embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
-						}
-					} else {
-						embed.addFields({"name": "`"+json['column'][i]+"`", "value": json['rowData'][i]});
-					}
-				}
-				message.channel.send(embed);
-			});
-		} 
+		}
 	}
 });
 
-function createDescription(userName, data){
+function createDescription(userName: string, data: any){
+	const lostArkData = config.LOSTARK_DATA;
 	// 각인 효과
 	let body4 = "";
 	for(let i = 0; i < data['ability'].length; i++){
@@ -92,9 +58,9 @@ function createDescription(userName, data){
 	}
 
 	let imgSrc = "";
-	for(let i = 0; i < lostArkData['job_images'].length; i++){
-		if(lostArkData['job_images'][i]['jobName'] === data['job']){
-			imgSrc = lostArkData['job_images'][i]['imgSrc'];
+	for(let i = 0; i < lostArkData.JOB_IMAGES.length; i++){
+		if(lostArkData.JOB_IMAGES[i].JOB_NAME === data['job']){
+			imgSrc = lostArkData.JOB_IMAGES[i].IMG_SRC;
 		}
 	}
 
@@ -136,7 +102,7 @@ function createDescription(userName, data){
 		.setFooter("밤에뜨는해", "https://i.imgur.com/Vc11WQc_d.webp?maxwidth=760&fidelity=grand")
 		;
 		const ownInfoArr = body5.split("\n");
-		count = 1;
+		let count = 1;
 		let temp = "";
 		for(let i = 0; i < ownInfoArr.length; i++){
 			temp = temp + ownInfoArr[i] + "\n";
@@ -170,7 +136,7 @@ function createDescription(userName, data){
 	return embed;
 }
 
-function createEventDescription(data){
+function createEventDescription(data: any){
 	let embedArr = [];
 	for(let i = 0; i < data['subject'].length; i++){
 		const embed = new Discord.MessageEmbed()

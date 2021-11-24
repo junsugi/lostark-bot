@@ -1,5 +1,9 @@
-config.json
+src/config/config.ts
 
 node_modules/
 
 docs/
+
+dist/
+
+.idea/
