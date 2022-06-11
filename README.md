@@ -3,6 +3,7 @@
 ![npm](https://img.shields.io/badge/npm-6.14.10-green?logo=npm)&nbsp;![](https://img.shields.io/badge/discord.js-12.5.3-purple?logo=discord)&nbsp; ![](https://img.shields.io/badge/axios-0.21.1-red)&nbsp;![](https://img.shields.io/badge/cheerio-1.0.0--rc.9-orange)&nbsp;![](https://img.shields.io/badge/IDE-vscode-blueviolet?logo=visual-studio-code)
 
 <b>해당 소스코드는 12버전대 discordjs 라이브러리를 사용하고 있어 최신버전(13버전대)과 맞지 않습니다. </b>
+<b>동작에만 의의를 두고 만들었던 버전이라 구조는 개판입니다. (고쳐볼라 했는데 포기함) </b>
 
 ## Getting Started
 
