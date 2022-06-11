@@ -2,6 +2,8 @@
 
 ![npm](https://img.shields.io/badge/npm-6.14.10-green?logo=npm)&nbsp;![](https://img.shields.io/badge/discord.js-12.5.3-purple?logo=discord)&nbsp; ![](https://img.shields.io/badge/axios-0.21.1-red)&nbsp;![](https://img.shields.io/badge/cheerio-1.0.0--rc.9-orange)&nbsp;![](https://img.shields.io/badge/IDE-vscode-blueviolet?logo=visual-studio-code)
 
+<b>해당 소스코드는 12버전대 discordjs 라이브러리를 사용하고 있어 최신버전(13버전대)과 맞지 않습니다. </b>
+
 ## Getting Started
 
 `discord` 봇을 만들 수 있는 라이브러리는 `Python` 부터 시작해서 `Java`, `Javascript` 로 매우 다양한 언어에 존재한다. 하지만 `discord.js`는 `discord` 봇 만드는 라이브러리 중 가장 유명할 뿐더러 `Javascript` 연습도 할겸 이용해보았다. (추후에 벨로그에 기술하면 링크하)
